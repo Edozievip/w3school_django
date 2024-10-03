@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing page</title>
+</head>
+<body>
+        
+    <table border='1'>
+        <tr>
+            <th>ID</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Age</th>
+            <th>phone</th>
+        </tr>
+
+        
+        {% for member in myMembers %}
+
+        <tr>
+            <td> {{member.id}} </td>
+            <td> {{member.firstname}} </td>
+            <td> {{member.lastname}} </td>
+            <td> {{member.age}} </td>
+            <td> {{member.phone}} </td>
+        </tr>
+            
+        {% endfor %}
+            
+    </table>    
+        
+</body>
+</html>

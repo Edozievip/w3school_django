@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>School Locations in Anambra State</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <!-- Leaflet Search Plugin CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-search@2.9.9/dist/leaflet-search.min.css" />
+    
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+
+        /* Styling for the school labels */
+        .school-label {
+            font-weight: bold;
+            color: #333;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 2px 5px;
+            border-radius: 3px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>School Locations in Anambra State</h1>
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <!-- Leaflet Search Plugin JS -->
+    <script src="https://unpkg.com/leaflet-search@2.9.9/dist/leaflet-search.min.js"></script>
+
+    <script>
+        // Initialize the map centered on Anambra State
+        var map = L.map('map').setView([6.245916, 7.121774], 10);
+
+        // Load a map tile layer from OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Custom red icon for searched markers
+        var redIcon = L.icon({
+            iconUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon-red.png',  // Use Leaflet's red marker icon
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34]
+        });
+
+        // Default blue icon
+        var blueIcon = L.icon({
+            iconUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png',  // Use Leaflet's default blue marker icon
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34]
+        });
+
+        // School data with additional details
+        var schools = [
+            { 
+                name: "Nnamdi Azikiwe University", 
+                lat: 6.245916, 
+                lng: 7.121774,
+                description: "A public university in Awka, offering undergraduate and postgraduate programs.",
+                contact: "Contact: +234 803 123 4567",
+                image: "https://example.com/unizik_image.jpg"
+            },
+            { 
+                name: "Federal Polytechnic, Oko", 
+                lat: 6.042204, 
+                lng: 7.113553,
+                description: "A federal polytechnic offering various technical and vocational courses.",
+                contact: "Contact: +234 805 987 6543",
+                image: "https://example.com/oko_poly_image.jpg"
+            },
+            { 
+                name: "Madonna University, Okija", 
+                lat: 5.916667, 
+                lng: 6.860556,
+                description: "A private Catholic university offering various programs in arts and sciences.",
+                contact: "Contact: +234 802 654 3210",
+                image: "https://example.com/madonna_image.jpg"
+            }
+        ];
+
+        // LayerGroup to hold the markers
+        var markersLayer = L.layerGroup();
+        map.addLayer(markersLayer);
+
+        // Object to store references to each marker, keyed by school name
+        var markerMap = {};
+
+        // Add markers with labels and popups for each school
+        schools.forEach(function(school) {
+            // Create a marker for the school with the default blue icon
+            var marker = L.marker([school.lat, school.lng], {
+                icon: blueIcon,
+                title: school.name  // Set title for better integration with the search plugin
+            }).addTo(map);
+
+            // Create a popup content with additional details and image
+            var popupContent = `
+                <b>${school.name}</b><br>
+                <img src="${school.image}" alt="${school.name}" width="150" height="100"><br>
+                <p>${school.description}</p>
+                <p>${school.contact}</p>
+            `;
+            marker.bindPopup(popupContent);
+
+            // Add each marker to the LayerGroup and set the 'name' as a feature property
+            marker.feature = {
+                properties: {
+                    name: school.name
+                }
+            };
+
+            // Store marker reference in the markerMap object for easy access
+            markerMap[school.name] = marker;
+
+            // Add the marker to the LayerGroup
+            markersLayer.addLayer(marker);
+        });
+
+        // Add Leaflet Search control to the map
+        var searchControl = new L.Control.Search({
+            layer: markersLayer,      // Search among the markers
+            propertyName: 'name',     // Search by school name
+            initial: false,
+            zoom: 14,                 // Zoom level after search result
+            marker: false,            // Disable extra search marker
+            textErr: 'No school found!', // Message when no result found
+        });
+
+        // When a marker is found during search
+        searchControl.on('search:locationfound', function(e) {
+            // Reset all markers to blue
+            Object.values(markerMap).forEach(function(marker) {
+                marker.setIcon(blueIcon);
+            });
+
+            // Set the found marker's icon to red
+            e.layer.setIcon(redIcon);
+
+            // Display the school name below the marker using a label
+            var label = L.divIcon({
+                className: 'school-label',
+                html: e.layer.feature.properties.name
+            });
+
+            // Add the label below the red marker
+            var nameLabel = L.marker(e.latlng, { icon: label }).addTo(map);
+            
+            // Open the popup for additional details
+            e.layer.openPopup();
+        });
+
+        // Add search bar to the map
+        map.addControl(searchControl);
+    </script>
+</body>
+</html>

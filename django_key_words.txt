@@ -1,0 +1,60 @@
+Python key words to execute some programs
+
+1. To create a project - django-admin startproject "projectname"
+2. To create app in a project - python manage.py startapp "appname"
+3. To start a live server - python manage.py runserver
+4. To create migrations for those changes for a database - python manage.py makemigrations (you can include the name of the particular app if you want to)
+5. To apply those changes to the database - python manage.py migrate.
+6. To check django version - python -m django --version
+7. To create a virtual environment - pipenv shell
+8. To invoke the python shell - python manage.py shell or use 'ipython'
+9. To create admin user - python manage.py createsuperuser
+10. To install django - pipenv install django
+
+CREATING A PROJECT
+1. Create a folder that you want to work on.
+2. Create a virtual env and install django
+3. Create a project
+4. cd into the project and create and app
+5. Open views.py and create your views. "From django.http import HttpResponse".
+6. Create a urls.py file inside the app. "From . import views". Create a path for the view inside the urls.py
+7. Go to urls.py file inside the project folder and create a path for the app. Don't forget to import "include".
+8. Inside the app, create a folder named "template" and create css, html, js and image folders or files.
+9. Go to views.py and render the html file.
+10. Go to settings inside the project and add the app into installed_apps.
+
+To create a model
+1. Go to models.py inside the app and define your model.
+2. Create migrations for the changes inside the project folder.
+3. Run the "migrate" command to apply those changes.
+Adding values to the model
+1. Open a python shell - python manage.py shell
+2. import the function from the model - "from appname.models import function_name". (appname=the name of the app you created, models=model file inside the app, function_name=the name of the function where you defined your model)
+3. Add a record or value to the model you created - variable_name = function_name(firstname="value", lastname="value"). We assume that you have firstname and lastname in the model you defined.
+4. To save = variable_name.save()
+5. To view all - function_name.objects.all() or function_name.objects.all().values()
+6. To view one - function_name.objects.all().values()[index_number]
+7. To view id or lastname or firstname - function_name.objects.all()[index_number].lastname
+8. To update - variable_name.lastname = "value". (Don't forget to save) variable_name.save()
+9. To delete - variable_name.delete(). (variable_name is the variable at the index you want to delete)
+Adding other fields to the already created model
+1. Go to models.py and add or remove the fields that you want.
+2. Create migrations for the changes inside the project folder.
+3. Run the "migrate" command to apply those changes.
+4. Enter the shell and add values to the new fields. Don't forget to save
+
+
+Creating Admin
+1. Navigate into your project folder - python manage.py createsuperuser
+2. Go to admin file in your app folder. Import the model and include "admin.site.register(function_name_you_created_in_the_model)"
+3.i. Go to models.py and Include 
+	def __str__(self):
+    		return f"{self.firstname} {self.lastname}"
+ii. Or go to admin.py and include 
+	class MemberAdmin(admin.ModelAdmin):
+	  list_display = ("firstname", "lastname", "joined_date",)
+	(don't forget to add MemberAdmin as an arguement in admin.site.register)
+**Both i and ii displays the list more reader friendly so choose one.
+
+
+**Learn how to query data on django

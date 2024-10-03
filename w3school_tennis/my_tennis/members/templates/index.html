@@ -1,0 +1,19 @@
+{% extends 'masters.html' %} 
+{% block title %} My Team Club = list of all members {% endblock %} 
+
+{% block content %}
+<p>Go to <a href="/">homepage</a></p>
+
+<h1>These are the names of all our members:</h1>
+<ol>
+  {% for i in myMembers %}
+  <li>
+    <p>{{i.firstname}} {{i.lastname}} is {{i.age}} years old</p>
+    <a href="details/{{i.id}}">
+      <p>more details</p>
+    </a>
+  </li>
+  {% endfor %}
+</ol>
+
+{% endblock %}

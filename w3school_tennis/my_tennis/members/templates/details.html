@@ -1,0 +1,13 @@
+{% extends 'masters.html' %}
+
+{% block title %}Details of team members{% endblock %} 
+
+{% block content %}
+<h1>{{ myMember.firstname }} {{ myMember.lastname }}</h1>
+<p>Phone: {{ myMember.phone }}</p>
+<p>Age: {{ myMember.age }}</p>
+
+<p>Back to <a href="/index">Index</a></p>
+<p>Go to <a href="/">homepage</a></p>
+
+{% endblock %}

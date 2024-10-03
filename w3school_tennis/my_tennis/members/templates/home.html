@@ -1,0 +1,25 @@
+{% extends "masters.html" %}
+
+
+{% block title %}MY FOOTBALL TEAM{% endblock %}
+    
+
+{% block content %}
+
+<h1>Welcome to our Football Team!</h1>
+<h3>Members</h3>
+<p>Check out all our <a href="index/">members</a></p>
+
+{% comment %} creating a variable inside html {% endcomment %}
+{% with  guess="Let's try something new"  %}
+ {{ guess }}
+    
+{% endwith %}
+    
+{% endblock %}
+
+    
+
+
+
+    

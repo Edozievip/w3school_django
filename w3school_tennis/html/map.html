@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>School Locations in Anambra State</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <!-- Leaflet Search plugin CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-search@2.9.8/dist/leaflet-search.css" />
+
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+        /* Optional styling for the school labels (next to the markers) */
+        .school-label {
+            font-weight: bold;
+            color: #333;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>School Locations in Anambra State</h1>
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <!-- leaflet search plugin js -->
+    <script src="https://unpkg.com/leaflet-search@2.9.8/dist/leaflet-search.min.js"></script>
+
+    <script>
+        // Initialize the map centered on Anambra State
+        var map = L.map('map').setView([6.245916, 7.121774], 10);
+
+        // Load a map tile layer from OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // School data with additional details
+        var schools = [
+            { 
+                name: "Nnamdi Azikiwe University, Awka", 
+                lat: 6.245916, 
+                lng: 7.121774,
+                description: "A public university in Awka, offering undergraduate and postgraduate programs.",
+                slogan: "Designed by Mr Kingsley",
+                contact: "Contact: +234 703 483 8125",
+                image: "https://example.com/unizik_image.jpg"
+            },
+            { 
+                name: "Federal Polytechnic, Oko", 
+                lat: 6.042204, 
+                lng: 7.113553,
+                description: "A federal polytechnic offering various technical and vocational courses.",
+                slogan: "Designed by Mr Chris",
+                contact: "Contact: +234 810 718 9127",
+                image: "oko_image.jpeg"
+            },
+            { 
+                name: "Madonna University, Okija", 
+                lat: 5.916667, 
+                lng: 6.860556,
+                description: "A private Catholic university offering various programs in arts and sciences.",
+                slogan: "Designed Mr Ebuka",
+                contact: "Contact: +234 706 089 1903",
+                image: "https://example.com/madonna_image.jpg"
+            },
+            { 
+                name: "New Era Secondary School", 
+                lat: 6.263974, 
+                lng: 6.918568,
+                description: "A school for learning.",
+                slogan: "Designed by Mrs Pamela",
+                contact: "Contact: +234 806 902 5988",
+                image: "https://example.com/newEra_image.jpg"
+            },
+            { 
+                name: "Chukwuemeka Odumegwu Ojukwu University", 
+                lat: 5.770104, 
+                lng: 6.835622,
+                description: "A state university offering both science and art courses.",
+                slogan: "Designed by Mr Timothy",
+                contact: "Contact: +234 813 048 0002",
+                image: "https://example.com/newEra_image.jpg"
+            }
+        ];
+
+        // LayerGroup to hold the markers
+        var markersLayer = new L.LayerGroup();
+        map.addLayer(markersLayer);
+
+        // Add markers with labels and popups for each school
+        schools.forEach(function(school) {
+            // Create a marker for the school
+            var marker = L.marker([school.lat, school.lng]).addTo(map);
+            
+            // Create a popup content with additional details and image
+            var popupContent = `
+                <b>${school.name}</b><br>
+                <img src="${school.image}" alt="${school.name}" width="150" height="100"><br>
+                <p>${school.description}</p>
+                <p>${school.slogan}</p>
+                <p>${school.contact}</p>
+            `;
+            marker.bindPopup(popupContent);
+
+             // Add each marker to the LayerGroup
+             markersLayer.addLayer(marker);
+            
+            // Show popup on hover (mouseover event)
+            //marker.on('mouseover', function (e) {
+                //this.openPopup();
+            //});
+
+            // Hide popup on mouseout
+            //marker.on('mouseout', function (e) {
+              //  this.closePopup();
+            //});
+
+            // Create a label for the school next to the marker using DivIcon
+            var label = L.divIcon({
+                className: 'school-label',  // Custom class for styling
+                html: school.name,          // The name to display as label
+               iconSize: [180, 40]
+            });
+
+            // Add the label near the marker (with slight offset)
+            L.marker([school.lat, school.lng], { icon: label })
+                .addTo(map);
+        });
+
+        // Add Leaflet Search control to the map
+        var searchControl = new L.Control.Search({
+            layer: markersLayer,    // Search among the markers
+            propertyName: 'name',   // Search by school name
+            initial: false,
+            zoom: 12,               // Zoom level after search result
+            marker: false           // Disable extra search marker
+        });
+
+        // Add search bar to the map
+        map.addControl(searchControl);
+    </script>
+</body>
+</html>
