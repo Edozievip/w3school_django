@@ -1,11 +1,26 @@
 body{
-    background-color: #f0f0f0;
+    background-color: #e6b7b7;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
 }
 
+h1{
+    text-align: center;
+    margin: 20px 0 40px 0;
+}
+
+.home{
+    text-align: center;
+    color: blue;
+}
+
 a{
     color: blue;
+}
+
+a:hover{
+    color: rgb(223, 78, 52);
     text-decoration: none;
+    cursor: pointer;
 }

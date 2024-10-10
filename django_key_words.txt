@@ -58,3 +58,23 @@ ii. Or go to admin.py and include
 
 
 **Learn how to query data on django
+
+
+
+**How to add static files like images, js and css
+1. Create a folder named "static" inside the app.
+2. Add a css file inside the static folder.
+3. Open the html file you want to style and add the following: "{% load static %}" at the top of the html file and "<link rel="stylesheet" href="{% static 'cssfilename.css' %}">" inside the head tag. Restart your server for the changes to take place (This will only work if "debug = True" in settings.py else follow the next steps)
+*NOTE: for production, set "debug = False" and "Allowed_host = '*'"
+4. Install whitenoise a 3rd party python library used in serving static files in virtual environ using "pip install whitenoise".
+5. Go to settings.py and add "whitenoise.middleware.WhiteNoiseMiddleware" inside MIDDLEWARE.
+6. To collect all necessary static files, specify a static_root property in settings.py "STATIC_ROOT = BASE_DIR / 'staticfiles'"(it must not be 'staticfiles', you can give it any name).
+7. Collect the static files by running "python manage.py collectstatic" or "py manage.py collectstatic". Type 'yes' to continue. Restart your server
+
+**How to use the static files in other applications
+1. Create a static folder inside the project(root level) and give it any name and add a css file inside the folder.
+2. Go to setings.py under "STATIC_ROOT" add "STATICFILES_DIRS = [ BASE_DIR / 'name of the static folder']. 
+*NOTE: Include all folders where you want django to look for static files inside "STATICFILES_DIR" list [].
+3. Open the html file you want to style and add the following: "{% load static %}" at the top of the html file and "<link rel="stylesheet" href="{% static 'cssfilename.css' %}">" inside the head tag.
+4. Collect the new static file by running "python manage.py collectstatic" or "py manage.py collectstatic". Type 'yes' to continue. Restart your server.
+*NOTE: Run the collectstatic command anytime changes are made in the static files for the changes to take effect.
